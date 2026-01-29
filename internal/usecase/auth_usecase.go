@@ -24,3 +24,11 @@ func (u *AuthUsecase) Login(email, password string) (string, error) {
 
 	return util.GenerateToken(user.ID.String())
 }
+
+func (u *AuthUsecase) GetProfile(userID string) (domain.User, error) {
+	var user domain.User
+	if err := u.DB.Where("id = ?", userID).First(&user).Error; err != nil {
+		return user, errors.New("user tidak ditemukan")
+	}
+	return user, nil
+}
