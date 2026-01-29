@@ -12,10 +12,17 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	authUsecase := usecase.AuthUsecase{DB: db}
 	authHandler := handler.AuthHandler{Usecase: authUsecase}
 
+	pocketUsecase := usecase.PocketUsecase{DB: db}
+	pocketHandler := handler.PocketHandler{Usecase: pocketUsecase}
+
 	api := app.Group("/api")
 
 	auth := api.Group("/auth")
 	auth.Post("/login", authHandler.Login)
 	auth.Get("/profile", middleware.JWTMiddleware, authHandler.GetProfile)
+
+	pockets := api.Group("/pockets", middleware.JWTMiddleware)
+	pockets.Post("/", pocketHandler.Create)
+	pockets.Get("/", pocketHandler.List)
 
 }
