@@ -56,3 +56,18 @@ func (h *PocketHandler) List(c *fiber.Ctx) error {
 		"data":    data,
 	})
 }
+
+func (h *PocketHandler) GetTotal(c *fiber.Ctx) error {
+	userID := c.Locals("user_id").(string)
+	total, err := h.Usecase.GetTotalBalance(userID)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": 500, "error": true, "message": "Gagal menghitung saldo"})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  200,
+		"error":   false,
+		"message": "Berhasil.",
+		"data":    fiber.Map{"total": total},
+	})
+}

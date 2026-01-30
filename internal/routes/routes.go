@@ -27,6 +27,7 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	pockets := api.Group("/pockets", middleware.JWTMiddleware)
 	pockets.Post("/", pocketHandler.Create)
 	pockets.Get("/", pocketHandler.List)
+	pockets.Get("/total-balance", pocketHandler.GetTotal)
 
 	api.Post("/incomes", middleware.JWTMiddleware, transactionHandler.CreateIncome)
 	api.Post("/expenses", middleware.JWTMiddleware, transactionHandler.CreateExpense)

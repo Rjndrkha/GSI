@@ -33,3 +33,12 @@ func (u *PocketUsecase) GetUserPockets(userID string) ([]domain.UserPocket, erro
 	}
 	return pockets, nil
 }
+
+func (u *PocketUsecase) GetTotalBalance(userID string) (int64, error) {
+	var total int64
+	err := u.DB.Model(&domain.UserPocket{}).
+		Where("user_id = ?", userID).
+		Select("COALESCE(SUM(balance), 0)").
+		Scan(&total).Error
+	return total, err
+}
